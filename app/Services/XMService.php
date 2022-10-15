@@ -11,15 +11,22 @@ class XMService {
     public function __construct()
     {}
 
-    
-    public function getCompanySymbols(){
+    /**
+     * Fetches all company details
+     */
+    public function getCompanySymbols(): Array{
         $url = 'https://pkgstore.datahub.io/core/nasdaq-listings/nasdaq-listed_json/data/a5bc7580d6176d60ac0b2142ca8d7df6/nasdaq-listed_json.json';
         $response = Http::get($url);
         if($response->ok()){
             return $response->json();
+        }else{
+            return null;
         }
     }
 
+    /**
+     * 
+     */
     public function getSymbolDetails($symbol){
         $symbols = $this->getCompanySymbols();
         foreach($symbols as $data){

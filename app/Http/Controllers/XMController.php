@@ -16,10 +16,9 @@ class XMController extends Controller
         $this->xmService = $xmService;
     }
 
-    public function historicalData(Request $request){
-
-    }
-
+    /**
+     * Endpoint to validate request
+     */
     public function submit(Request $request){
         $rules = [
             'email' => 'required|email:rfc,dns',
@@ -35,7 +34,8 @@ class XMController extends Controller
             if(!is_null($companySymbol)){ //symbol exists
                 $startDate = $request->get('startDate');
                 $endDate = $request->get('endDate');
-                $this->xmService->sendMail($startDate, $endDate, $companySymbol['Company Name']); //send mail
+                $subject = $companySymbol['Company Name'];
+                $this->xmService->sendMail($startDate, $endDate, $subject); //send mail
                 return response()->json(['success' => true, 'messages' => []]);
             }else{ //symbol doesn't exist or is invalid
                 $messages['symbol'] = 'The symbol field is not valid';
@@ -45,19 +45,6 @@ class XMController extends Controller
             return response()->json(['success' => false, 'messages' => $validator->messages()]);
         }
 
-    }
-
-    private function isValid($symbol){
-        if(!$symbol){
-            return false;
-        }
-        $response = $this->xmService->getCompanySymbols();
-        foreach($response as $data){
-            if($symbol == $data['Symbol']){
-                return true;
-            }
-        }
-        return false;
     }
     
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\XMController;
-use App\Mail\XMMail;
 use Illuminate\Support\Facades\Route;
 
 /*
