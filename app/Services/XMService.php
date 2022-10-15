@@ -38,7 +38,7 @@ class XMService {
     }
 
    
-    public function sendMail($startDate, $endDate, $subject){
-        Mail::to('victokala@gmail.com')->send(new XMMail($startDate, $endDate, $subject));
+    public function sendMail($recipient, $startDate, $endDate, $subject){
+        Mail::to($recipient)->send(new XMMail($startDate, $endDate, $subject));
     }
 }

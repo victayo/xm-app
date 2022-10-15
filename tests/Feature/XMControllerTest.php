@@ -71,6 +71,7 @@ class XMControllerTest extends TestCase
         $startDate = $requestData['startDate'];
         $endDate = $requestData['endDate'];
         $symbol = $requestData['symbol'];
+        $email = $requestData['email'];
 
         $this->xmService->expects($this->once())
         ->method('getSymbolDetails')
@@ -79,7 +80,7 @@ class XMControllerTest extends TestCase
 
         $this->xmService->expects($this->once())
         ->method('sendMail')
-        ->with($startDate, $endDate, $companyDetails['Company Name'])
+        ->with($email, $startDate, $endDate, $companyDetails['Company Name'])
         ->willReturn(
             [
                 'Company Name' => 'Mock Company',
@@ -92,10 +93,10 @@ class XMControllerTest extends TestCase
         ->method('all')
         ->willReturn($requestData);
 
-        $this->request->expects($this->exactly(3))->method('get')
+        $this->request->expects($this->exactly(4))->method('get')
         ->withConsecutive(
-            ['symbol'], ['startDate'], ['endDate']
-        )->willReturnOnConsecutiveCalls($symbol, $startDate, $endDate);
+            ['symbol'], ['startDate'], ['endDate'], ['email']
+        )->willReturnOnConsecutiveCalls($symbol, $startDate, $endDate, $email);
 
         Validator::shouldReceive('make')->with($requestData, $rules)->andReturn($this->validator);
         $this->validator->expects($this->once())

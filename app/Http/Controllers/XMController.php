@@ -34,8 +34,9 @@ class XMController extends Controller
             if(!is_null($companySymbol)){ //symbol exists
                 $startDate = $request->get('startDate');
                 $endDate = $request->get('endDate');
+                $email = $request->get('email');
                 $subject = $companySymbol['Company Name'];
-                $this->xmService->sendMail($startDate, $endDate, $subject); //send mail
+                $this->xmService->sendMail($email, $startDate, $endDate, $subject); //send mail
                 return response()->json(['success' => true, 'messages' => []]);
             }else{ //symbol doesn't exist or is invalid
                 $messages['symbol'] = 'The symbol field is not valid';
