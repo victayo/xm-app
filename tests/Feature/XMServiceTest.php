@@ -54,6 +54,22 @@ class XMServiceTest extends TestCase
         $this->assertSame($json, $companySymbol);
     }
 
+    public function testGetCompanySymbolsReturnNullWhenResponseNotOk()
+    {
+        Http::shouldReceive('get')
+            ->once()
+            ->with($this->nasdaqListUrl)
+            ->andReturn($this->response);
+        $this->response->expects($this->once())
+            ->method('ok')
+            ->willReturn(false);
+        $this->response->expects($this->exactly(0))
+            ->method('json');
+
+        $companySymbol = $this->xmService->getCompanySymbols();
+        $this->assertNull($companySymbol);
+    }
+
     public function testGetSymbolDetailsReturnsWhenSymbolExist(){
         $symbol = 'Mock symbol';
         $json = [
