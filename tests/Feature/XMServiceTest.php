@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Services\XMService;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\TestCase;
@@ -118,6 +119,36 @@ class XMServiceTest extends TestCase
         
         $symbolDetails = $this->xmService->getSymbolDetails($symbol);
         $this->assertNull($symbolDetails);
+    }
+
+
+    public function testGetHistoricalData(){
+        $pendingRequest = $this->createMock(PendingRequest::class);
+        $symbol = 'Invalid symbol';
+        $json = [
+            [
+                'Company Name' => 'Mock Company',
+                'Financial Status' => 'Mock Financial',
+                'Market Category' => 'Mock Category',
+                'Symbol' => 'Mock Symbol'
+            ]
+        ];
+        Http::shouldReceive('withHeaders')
+            ->once()
+            ->with(['X-RapidAPI-Key'=> env('RAPID_API_KEY'), 'X-RapidAPI-Host' => env('RAPID_API_HOST')])
+            ->andReturn($pendingRequest);
+        $pendingRequest->expects($this->once())
+        ->method('get')
+        ->willReturn($this->response);
+        $this->response->expects($this->once())
+            ->method('ok')
+            ->willReturn(true);
+        $this->response->expects($this->once())
+            ->method('json')
+            ->willReturn($json);
+        
+        $historicalData = $this->xmService->getHistoricalData($symbol);
+        $this->assertNotNull($historicalData);
     }
 
     

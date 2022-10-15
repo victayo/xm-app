@@ -133,20 +133,6 @@ class XMControllerTest extends TestCase
             'symbol' => 'required'
         ];
 
-        /**
-         * Company details of symbols
-         */
-        $companyDetails = [
-            'Company Name' => 'Mock Company',
-            'Financial Status' => 'Mock Financial',
-            'Market Category' => 'Mock Category',
-            'Symbol' => 'Mock symbol'
-        ];
-
-        $startDate = $requestData['startDate'];
-        $endDate = $requestData['endDate'];
-        $symbol = $requestData['symbol'];
-
         $this->xmService->expects($this->exactly(0))
         ->method('getSymbolDetails');
 
@@ -199,18 +185,7 @@ class XMControllerTest extends TestCase
             'symbol' => 'required'
         ];
 
-        /**
-         * Company details of symbols
-         */
-        $companyDetails = [
-            'Company Name' => 'Mock Company',
-            'Financial Status' => 'Mock Financial',
-            'Market Category' => 'Mock Category',
-            'Symbol' => 'Mock symbol'
-        ];
-
-        $startDate = $requestData['startDate'];
-        $endDate = $requestData['endDate'];
+        
         $symbol = $requestData['symbol'];
 
         $this->xmService->expects($this->once())
@@ -245,5 +220,45 @@ class XMControllerTest extends TestCase
         $this->assertTrue($response->status() == 200);
         $this->assertFalse($data->success);
         $this->assertFalse(empty($data->messages));
+    }
+
+    public function testHistoricalData(){
+        $symbol = 'TEST';
+        $data = [
+            'price' => [
+                'open'=> 2.32,
+                'close' => '2.5',
+                'date' => 123543356
+            ]
+        ];
+        $this->xmService->expects($this->once())
+        ->method('getHistoricalData')
+        ->with($symbol)
+        ->willReturn($data);
+
+        $controller = new XMController($this->xmService);
+        $response = $controller->historicalData($symbol);
+        $responseData = $response->getData();
+        $this->assertTrue($response->status() == 200);
+        $this->assertTrue($responseData->success);
+    }
+
+    public function testGetSymbolData(){
+        $symbol = 'TEST';
+        $data = [
+            'Company Name' => 'Mock Company',
+            'Financial Status' => 'Mock Financial',
+            'Market Category' => 'Mock Category',
+            'Symbol' => 'Mock symbol'
+        ];
+        $this->xmService->expects($this->once())
+        ->method('getCompanySymbols')
+        ->willReturn($data);
+
+        $controller = new XMController($this->xmService);
+        $response = $controller->getSymbolData();
+        $responseData = $response->getData();
+        $this->assertTrue($response->status() == 200);
+        $this->assertTrue($responseData->success);
     }
 }
