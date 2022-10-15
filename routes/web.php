@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\XMController;
+use App\Mail\XMMail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/historical-data', [XMController::class, 'historicalData']);
+Route::post('/submit', [XMController::class, 'submit']);
