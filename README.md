@@ -15,7 +15,7 @@ npm install
 php artisan serve
 
 ```
-
+<b>*This project has Laravel Sail Configured*</b>
 ## Configuration
 
 - Ensure a valid email driver is configured
