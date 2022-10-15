@@ -25,19 +25,24 @@ class Symbol extends React.Component{
     }
 
     componentDidMount(){
-        getData("https://pkgstore.datahub.io/core/nasdaq-listings/nasdaq-listed_json/data/a5bc7580d6176d60ac0b2142ca8d7df6/nasdaq-listed_json.json").then(data => {
-            let options = [];
-            data.forEach(symb => {
-                options.push({
-                    value: symb.Symbol,
-                    label: symb.Symbol
+        getData("/symbol-data").then(response => {
+            if(response.success){
+                let data = response.data;
+                let options = [];
+                data.forEach(symb => {
+                    options.push({
+                        value: symb.Symbol,
+                        label: symb.Symbol
+                    })
                 })
-            })
-            this.setState({
-                symbolData: data,
-                options: options,
-                loading: false
-            })
+                this.setState({
+                    symbolData: data,
+                    options: options,
+                    loading: false
+                })
+            }else{
+                window.alert('Oops! An error occurred while fetching symbols. Please refresh the page and try again')
+            }
         })
     }
 

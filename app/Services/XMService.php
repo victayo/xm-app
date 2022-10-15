@@ -24,6 +24,19 @@ class XMService {
         }
     }
 
+    public function getHistoricalData($symbol){
+        $url = "https://yh-finance.p.rapidapi.com/stock/v3/get-historical-data?symbol=$symbol&region=US";
+        $response = Http::withHeaders([
+            "X-RapidAPI-Key" => env('RAPID_API_KEY'),
+            "X-RapidAPI-Host" => env('RAPID_API_HOST')
+        ])->get($url);
+        if($response->ok()){
+            return $response->json();
+        }else{
+            return null;
+        }
+    }
+
     /**
      * Get the full details of a symbol
      */
@@ -36,6 +49,8 @@ class XMService {
         }
         return null;
     }
+
+
 
    
     public function sendMail($recipient, $startDate, $endDate, $subject){

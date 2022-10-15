@@ -18,5 +18,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/historical-data', [XMController::class, 'historicalData']);
+Route::get('/historical-data/{symbol}', [XMController::class, 'historicalData']);
+Route::get('/symbol-data', [XMController::class, 'getSymbolData']);
 Route::post('/submit', [XMController::class, 'submit']);

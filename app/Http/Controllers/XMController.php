@@ -47,5 +47,22 @@ class XMController extends Controller
         }
 
     }
+
+    public function historicalData($symbol){
+        $data = $this->xmService->getHistoricalData($symbol);
+        if($data){
+            return response()->json(['success' => true, 'data' => $data]);
+        }else{
+            return response()->json(['success' => false, 'data' => []]);
+        }
+    }
     
+    public function getSymbolData(){
+        $data = $this->xmService->getCompanySymbols();
+        if($data){
+            return response()->json(['success' => true, 'data' => $data]);
+        }else{
+            return response()->json(['success' => false, 'data' => []]);
+        }
+    }
 }

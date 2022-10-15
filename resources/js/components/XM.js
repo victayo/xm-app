@@ -30,25 +30,23 @@ class XM extends React.Component {
         let unixStartDate = moment(startDate).unix();
         let unixEndDate = moment(endDate).unix();
         let symbol = event.symbol;
-        getData(
-            `https://yh-finance.p.rapidapi.com/stock/v3/get-historical-data?symbol=${symbol}&region=US`,
-            {
-                "X-RapidAPI-Key":
-                    "5eb3d06a1dmsha5d264099c82260p140997jsn129b7c02ee89",
-                "X-RapidAPI-Host": "yh-finance.p.rapidapi.com",
+        getData(`/historical-data/${symbol}`)
+        .then((response) => {
+            if(response.success){
+                let d = response.data.prices.filter((price) => {
+                    return price.date >= unixStartDate && price.date <= unixEndDate;
+                });
+                let dataSource = this.getChartDataSource(d, startDate, endDate);
+                this.setState({
+                    historicalData: d,
+                    dataSource: dataSource,
+                    loading: false,
+                    startDate: startDate,
+                    endDate: endDate,
+                });
+            }else{
+                window.alert('Oops! An error occurred while fetching historical data. Please try again')
             }
-        ).then((data) => {
-            let d = data.prices.filter((price) => {
-                return price.date >= unixStartDate && price.date <= unixEndDate;
-            });
-            let dataSource = this.getChartDataSource(d, startDate, endDate);
-            this.setState({
-                historicalData: d,
-                dataSource: dataSource,
-                loading: false,
-                startDate: startDate,
-                endDate: endDate,
-            });
         });
     };
 
